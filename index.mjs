@@ -117,6 +117,23 @@ app.get('/student', async (req, res) => {
 
 });
 
+app.get('/fresh', async(req, res) => {
+    const client = await pool.connect();
+    const result = await client.query("select * from student")
+
+    const fresh =[];
+    for(let i = 0; i < result.rows.length; i++) {
+        let high_num = result.rows[i].id.slice(0,4)
+        if(high_num >= '2014') {
+            fresh.push(result.rows[i])
+        } 
+           
+        }
+        res.json('fresh');
+        client.release();
+    });
+
+
 app.listen(5005, () => {
     console.log('Server Open!')
 })
